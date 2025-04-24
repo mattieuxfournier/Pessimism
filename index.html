@@ -1,9 +1,1479 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz with Philosophers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+        }
+        .content-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .quiz-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question-container {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            display: none;
+        }
+        .active-question {
+            display: block;
+        }
+        .animation-container {
+            height: 200px;
+            background-color: #e9f5ff;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .moving-object {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: #3498db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        input[type="text"], input[type="radio"] {
+            margin: 10px 0;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .progress {
+            height: 10px;
+            background-color: #4CAF50;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .hidden {
+            display: none;
+        }
+        .score-display {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+        /* Philosopher animation styles */
+        .startup-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #121212;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 1.5s ease;
+            overflow: hidden;
+        }
+        .shrink {
+            width: 800px;
+            height: 300px;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 10px;
+        }
+        .philosopher {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.5s ease;
+        }
+        .philosopher-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+        .name-left .philosopher-content {
+            flex-direction: row-reverse;
+        }
+        .philosopher-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 10px;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            margin: 0 30px;
+        }
+        .philosopher-info {
+            flex: 1;
+            color: #ecf0f1;
+            text-align: center;
+        }
+        .philosopher-name {
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+        .philosopher-quote {
+            font-size: 24px;
+            font-style: italic;
+            color: #bdc3c7;
+            line-height: 1.4;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        .startup-title {
+            position: absolute;
+            top: 40px;
+            color: #ecf0f1;
+            font-size: 48px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            z-index: 10;
+        }
+        .startup-subtitle {
+            position: absolute;
+            top: 100px;
+            color: #bdc3c7;
+            font-size: 24px;
+            z-index: 10;
+        }
+        .shrink-title {
+            position: absolute;
+            top: 20px;
+            color: #ecf0f1;
+            font-size: 36px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        .start-quiz-btn {
+            position: absolute;
+            bottom: 40px;
+            background-color: #e74c3c;
+            display: none;
+            z-index: 10;
+            font-size: 24px;
+            padding: 15px 30px;
+            border-radius: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .start-quiz-btn:hover {
+            background-color: #c0392b;
+            transform: scale(1.05);
+            transition: all 0.2s ease;
+        }
+        /* ASCII Art for terminal style */
+        .ascii-art {
+            font-family: monospace;
+            font-size: 10px;
+            line-height: 10px;
+            white-space: pre;
+            text-align: left;
+            color: #66ff66;
+            margin: 0 30px;
+            padding: 20px;
+            background-color: #000;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(102, 255, 102, 0.3);
+            width: 300px;
+            height: 300px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+            .results-container {
+                background-color: white;
+                border-radius: 10px;
+                padding: 30px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                max-width: 800px;
+                margin: 20px auto;
+            }
+            
+            .score-summary {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: #f9f9f9;
+                border-radius: 8px;
+            }
+            
+            .action-btn {
+                background-color: #e74c3c;
+                color: white;
+                padding: 12px 25px;
+                border: none;
+                border-radius: 30px;
+                font-size: 18px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            }
+            
+            .action-btn:hover {
+                background-color: #c0392b;
+                transform: translateY(-2px);
+            }
+            
+            .secondary-btn {
+                background-color: #3498db;
+                color: white;
+                padding: 8px 16px;
+                border: none;
+                border-radius: 20px;
+                font-size: 14px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+            
+            .secondary-btn:hover {
+                background-color: #2980b9;
+            }
+            
+            .aphorism-section {
+                margin: 30px 0;
+                text-align: center;
+            }
+            
+            .aphorism-card {
+                background-color: #1a1a1a;
+                color: #f0f0f0;
+                padding: 25px;
+                border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                margin-bottom: 15px;
+                position: relative;
+            }
+            
+            .aphorism-text {
+                font-size: 22px;
+                font-style: italic;
+                margin-bottom: 10px;
+                line-height: 1.4;
+            }
+            
+            .aphorism-author {
+                font-size: 16px;
+                text-align: right;
+                margin-top: 15px;
+                font-weight: bold;
+                color: #bdc3c7;
+            }
+            
+            .philosophers-section {
+                margin-top: 40px;
+            }
+            
+            .philosophers-tabs {
+                background-color: #f9f9f9;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+            
+            .tab-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                background-color: #121212;
+            }
+            
+            .tab-button {
+                padding: 12px 18px;
+                background-color: transparent;
+                border: none;
+                color: #f0f0f0;
+                cursor: pointer;
+                font-size: 16px;
+                transition: all 0.2s ease;
+                flex-grow: 1;
+            }
+            
+            .tab-button:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+            
+            .tab-button.active {
+                background-color: #e74c3c;
+                font-weight: bold;
+            }
+            
+            .tab-content {
+                padding: 20px;
+            }
+            
+            .philosopher-tab {
+                display: none;
+            }
+            
+            .philosopher-tab.active {
+                display: block;
+            }
+            
+            .philosopher-header {
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+            
+            .philosopher-image-small {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                margin-right: 20px;
+                background-size: cover;
+                background-position: center;
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            }
+            
+            .philosopher-name-header {
+                flex-grow: 1;
+            }
+            
+            .philosopher-name-header h3 {
+                margin: 0;
+                font-size: 24px;
+            }
+            
+            .philosopher-name-header p {
+                margin: 5px 0 0;
+                color: #666;
+            }
+            
+            .philosopher-details {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+            
+            .philosopher-info-card {
+                flex-basis: calc(50% - 10px);
+                background-color: #fff;
+                border-radius: 8px;
+                padding: 15px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+            
+            .philosopher-info-card h4 {
+                margin-top: 0;
+                color: #e74c3c;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 8px;
+            }
+            
+            @media (max-width: 768px) {
+                .philosopher-details {
+                    flex-direction: column;
+                }
+                
+                .philosopher-info-card {
+                    flex-basis: 100%;
+                }
+            }
+            
+            /* Modern UI Improvements for question segment */
+            .question-container {
+                margin-bottom: 25px;
+                padding: 25px;
+                border: none;
+                border-radius: 10px;
+                background-color: #fff;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+                transition: all 0.3s ease;
+            }
+            
+            .question-container h3 {
+                font-size: 20px;
+                margin-top: 0;
+                color: #333;
+                border-bottom: 2px solid #f0f0f0;
+                padding-bottom: 15px;
+            }
+            
+            .question-container input[type="radio"] {
+                display: none;
+            }
+            
+            .question-container label {
+                display: block;
+                padding: 12px 15px;
+                margin: 8px 0;
+                border-radius: 6px;
+                background-color: #f9f9f9;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                font-size: 16px;
+            }
+            
+            .question-container label:hover {
+                background-color: #f0f0f0;
+            }
+            
+            .question-container input[type="radio"]:checked + label {
+                background-color: #3498db;
+                color: white;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+            
+            .question-container input[type="text"] {
+                width: 100%;
+                padding: 12px 15px;
+                font-size: 16px;
+                border: 2px solid #e0e0e0;
+                border-radius: 6px;
+                transition: all 0.2s ease;
+                margin-top: 15px;
+            }
+            
+            .question-container input[type="text"]:focus {
+                border-color: #3498db;
+                outline: none;
+                box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+            }
+            
+            .feedback {
+                margin-top: 15px;
+                padding: 12px 15px;
+                border-radius: 6px;
+                font-weight: bold;
+                animation: fadeIn 0.5s ease;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            
+            .navigation {
+                margin-top: 30px;
+            }
+            
+            .navigation button {
+                padding: 12px 25px;
+                border-radius: 30px;
+                font-size: 16px;
+                font-weight: bold;
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+                transition: all 0.2s ease;
+            }
+            
+            .navigation button:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+            }
+            
+        
+    </style>
 </head>
 <body>
-    <py-script> print('I welcome you to py script blog') </py-script>
+    <!-- Startup Animation with Philosophers -->
+    <div class="startup-container" id="startup-container">
+        <h1 class="startup-title">Philosophical Quiz</h1>
+        <h3 class="startup-subtitle">Featuring Pessimistic Philosophers</h3>
+        <h2 class="shrink-title" id="shrink-title">Pessimism Quiz</h2>
+        
+        <!-- Philosophers will be inserted here by JavaScript -->
+        
+        <button class="start-quiz-btn" id="start-quiz-btn">Start Quiz</button>
+    </div>
+
+    <div class="content-container">
+        <div class="quiz-container" id="quiz-container" style="display: none;">
+            <div class="progress-bar">
+                <div id="progress"></div>
+            </div>
+            <div class="score-display" id="score-display">Score: 0/10</div>
+            <div class="animation-container" id="animation-container">
+                <div class="moving-object" id="moving-object">Q</div>
+            </div>
+            <div id="questions"></div>
+            <div class="navigation">
+                <button id="prev-btn">Previous</button>
+                <button id="submit-btn">Check Answer</button>
+                <button id="next-btn" class="hidden">Next</button>
+            </div>
+            <div class="results-container" id="results-container" style="display: none;">
+                <h1>Quiz Complete!</h1>
+                <div class="score-summary">
+                    <h2>Your Final Score: <span id="final-score"></span></h2>
+                    <button id="retry-quiz-btn" class="action-btn">Retry Quiz</button>
+                </div>
+                
+                <div class="aphorism-section">
+                    <h2>Philosophical Aphorism</h2>
+                    <div class="aphorism-card">
+                        <p id="random-aphorism" class="aphorism-text"></p>
+                        <p id="aphorism-author" class="aphorism-author"></p>
+                    </div>
+                    <button id="new-aphorism-btn" class="secondary-btn">New Aphorism</button>
+                </div>
+                
+                <div class="philosophers-section">
+                    <h2>Learn About the Philosophers</h2>
+                    <div class="philosophers-tabs">
+                        <div class="tab-buttons" id="philosopher-tabs"></div>
+                        <div class="tab-content" id="philosopher-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <script>
+        "use strict";
+        // Pessimistic Philosophers Data for Startup Animation
+        const philosophers = [
+            {
+                name: "Arthur Schopenhauer",
+                quote: "Life swings like a pendulum backward and forward between pain and boredom.",
+                useAscii: false,
+                image: "Schop.jpg"
+            },
+            {
+                name: "Friedrich Nietzsche",
+                quote: "To live is to suffer, to survive is to find some meaning in the suffering.",
+                useAscii: false,
+                image: "Niet.jpg"
+            },
+            {
+                name: "Sigmund Freud",
+                quote: "The first human who hurled an insult instead of a stone was the founder of civilization.",
+                useAscii: false,
+                image: "freud.jpg"
+            },
+            {
+                name: "Peter Wessel Zapffe",
+                quote: "Man is a tragic animal. Not because of his smallness, but because he is too well endowed. Man has longings and spiritual demands that reality cannot fulfill.",
+                useAscii: false,
+                image: "zap.jpg"
+            },
+            {
+                name: "Albert Camus",
+                quote: "There is but one truly serious philosophical problem, and that is suicide.",
+                useAscii: false,
+                image: "camus.jpg"
+            }
+        ];
+
+        // Question Types as Classes
+        class Question {
+            constructor(question, answer) {
+                this.question = question;
+                this.answer = answer;
+            }
+
+            render(index, currentAnswer) {
+                // Base rendering logic for a question
+                const questionDiv = document.createElement("div");
+                questionDiv.className = "question-container";
+                
+                const questionText = document.createElement("h3");
+                questionText.innerHTML = this.question;
+                questionDiv.appendChild(questionText);
+                
+                return questionDiv;
+            }
+
+            checkAnswer(userAnswer) {
+                // Base answer checking logic
+                return userAnswer && userAnswer.toLowerCase() === this.answer.toLowerCase();
+            }
+        }
+
+        class MultipleChoiceQuestion extends Question {
+            constructor(question, options, answer) {
+                super(question, answer);
+                this.options = options;
+                this.type = "multiple_choice";
+            }
+
+            render(index, currentAnswer) {
+                const questionDiv = super.render(index, currentAnswer);
+                
+                for (const option of this.options) {
+                    const optionDiv = document.createElement("div");
+                    
+                    const radio = document.createElement("input");
+                    radio.type = "radio";
+                    radio.name = `q${index}`;
+                    radio.value = option;
+                    radio.id = `q${index}_${option}`;
+                    
+                    if (currentAnswer === option) {
+                        radio.checked = true;
+                    }
+                        
+                    const label = document.createElement("label");
+                    label.htmlFor = `q${index}_${option}`;
+                    label.innerHTML = option;
+                    
+                    optionDiv.appendChild(radio);
+                    optionDiv.appendChild(label);
+                    questionDiv.appendChild(optionDiv);
+                }
+                
+                return questionDiv;
+            }
+
+            getCurrentAnswer(index) {
+                const radioButtons = document.getElementsByName(`q${index}`);
+                for (const btn of radioButtons) {
+                    if (btn.checked) {
+                        return btn.value;
+                    }
+                }
+                return null;
+            }
+            checkAnswer(userAnswer) {
+                // Directly compare the user's selected option with the correct answer
+                return userAnswer === this.answer;
+            }
+        }
+
+        class ShortAnswerQuestion extends Question {
+            constructor(question, answer) {
+                super(question, answer);
+                this.type = "short_answer";
+            }
+
+            render(index, currentAnswer) {
+                const questionDiv = super.render(index, currentAnswer);
+                
+                const inputField = document.createElement("input");
+                inputField.type = "text";
+                inputField.id = `q${index}_answer`;
+                inputField.placeholder = "Your answer...";
+                
+                if (currentAnswer) {
+                    inputField.value = currentAnswer;
+                }
+                    
+                questionDiv.appendChild(inputField);
+                
+                return questionDiv;
+            }
+
+// Line 256-260
+            getCurrentAnswer(index) {
+                const inputField = document.getElementById(`q${index}_answer`);
+                return inputField ? inputField.value.trim() : null;
+            }
+        }
+
+        class FillBlankQuestion extends ShortAnswerQuestion {
+            constructor(question, answer) {
+                super(question, answer);
+                this.type = "fill_blank";
+            }
+            
+            // Inherits render and getCurrentAnswer from ShortAnswerQuestion
+        }
+        const philosopherDetails = [
+        {
+            id: "schopenhauer",
+            name: "Arthur Schopenhauer",
+            years: "1788-1860",
+            image: "Schop.jpg",
+            keyIdeas: [
+                "The world as will and representation",
+                "Pessimism as a philosophical stance",
+                "Influence of Eastern philosophy on Western thought"
+            ],
+            history: "Born in Danzig (now Gdańsk, Poland), Schopenhauer studied at the University of Göttingen and later Berlin. He was known for his cantankerous personality and opposition to Hegel's idealism. He lived most of his later life in Frankfurt, where he wrote his major works in isolation from the academic establishment.",
+            beliefs: "Schopenhauer believed that the world is driven by a continually dissatisfied will, which constantly oscillates between pain and boredom. He saw human desire as the root of suffering, reflecting Buddhist concepts. His ethics focused on compassion as the basis of morality, with art and aesthetic contemplation providing temporary relief from the suffering of existence.",
+            legacy: "His work influenced philosophers like Nietzsche and Freud, composers like Wagner, and writers like Thomas Mann. His pessimistic worldview and integration of Eastern thought into Western philosophy marked a significant shift in European intellectual history."
+        },
+        {
+            id: "nietzsche",
+            name: "Friedrich Nietzsche",
+            years: "1844-1900",
+            image: "Niet.jpg",
+            keyIdeas: [
+                "Eternal recurrence",
+                "Will to power",
+                "Übermensch (Superman)",
+                "God is dead"
+            ],
+            history: "Born in Prussia, Nietzsche became a professor of classical philology at the University of Basel at just 24. Health problems forced him to resign, after which he lived as an independent philosopher. He suffered a mental collapse in 1889 and spent his final years in care until his death.",
+            beliefs: "Nietzsche rejected traditional morality and metaphysics, promoting instead the affirmation of life despite its suffering. He criticized Christianity for its 'slave morality' and advocated for the creation of new values by exceptional individuals (the Übermensch). His concept of the will to power described the basic drive of all life to expand and grow.",
+            legacy: "Among the most influential philosophers of modern times, Nietzsche's ideas on power, morality, and the death of God had profound impacts on existentialism, postmodernism, and psychoanalysis. His work continues to challenge conventional thinking across philosophy, psychology, and cultural studies."
+        },
+        {
+            id: "camus",
+            name: "Albert Camus",
+            years: "1913-1960",
+            image: "camus.jpg",
+            keyIdeas: [
+                "The absurd",
+                "Revolt against meaninglessness",
+                "Philosophical suicide vs. physical suicide"
+            ],
+            history: "Born in French Algeria to a poor household, Camus worked his way through school while battling tuberculosis. He became a journalist and participated in the French Resistance during World War II. He was awarded the Nobel Prize in Literature in 1957 and died in a car accident just three years later.",
+            beliefs: "Camus explored the concept of the absurd—the conflict between the human desire for meaning and the indifferent universe. Rather than escaping through suicide or religious faith ('philosophical suicide'), Camus advocated for embracing the absurd through conscious revolt, freedom, and passion.",
+            legacy: "Although he rejected the label of existentialist, Camus's explorations of absurdity and meaning made him a key figure in existentialist thought. His novels like 'The Stranger' and essays like 'The Myth of Sisyphus' continue to influence discussions of meaning, ethical action, and political engagement."
+        },
+        {
+            id: "freud",
+            name: "Sigmund Freud",
+            years: "1856-1939",
+            image: "freud.jpg",
+            keyIdeas: [
+                "Unconscious mind",
+                "Id, ego, and superego",
+                "Defense mechanisms",
+                "Psychoanalysis"
+            ],
+            history: "Born to Jewish parents in the Moravian town of Freiberg (now Czech Republic), Freud studied medicine at the University of Vienna. He established his clinical practice in Vienna, where he developed psychoanalysis. Following Nazi Germany's annexation of Austria, Freud fled to London where he died in 1939.",
+            beliefs: "Freud believed that human behavior is determined by unconscious drives and conflicts, particularly those of a sexual nature. He saw civilization as a source of necessary repression but also discontent. His therapeutic approach involved bringing unconscious material to conscious awareness through techniques like free association and dream interpretation.",
+            legacy: "As the founder of psychoanalysis, Freud revolutionized the understanding of human psychology and treatment of mental illness. His ideas on the unconscious mind, repression, and the importance of childhood experiences continue to influence psychology, psychiatry, and cultural criticism, despite significant challenges to many of his specific theories."
+        },
+        {
+            id: "zapffe",
+            name: "Peter Wessel Zapffe",
+            years: "1899-1990",
+            image: "zap.jpg",
+            keyIdeas: [
+                "Cosmic pessimism",
+                "The tragic sense of life",
+                "Coping mechanisms: isolation, anchoring, distraction, and sublimation"
+            ],
+            history: "Born in Tromsø, Norway, Zapffe was a mountaineer, humorist, and philosopher. He earned a law degree but never practiced, instead devoting himself to writing and philosophy. Despite producing relatively few works, his essay 'The Last Messiah' and book 'On the Tragic' are considered landmark works in philosophical pessimism.",
+            beliefs: "Zapffe argued that human consciousness has evolved beyond what is biologically necessary, making us aware of our own mortality and the ultimate meaninglessness of existence. He believed humans develop coping mechanisms to shield themselves from this tragic awareness, including distraction, isolation, anchoring (in fixed ideas like religion), and sublimation (transforming anxiety into art).",
+            legacy: "Though less well-known internationally than other pessimistic philosophers, Zapffe's work has gained growing recognition for its unique perspective on human consciousness as a tragic evolutionary mistake. His ecological concerns and analysis of human coping mechanisms continue to resonate with contemporary environmental philosophy and existential psychology."
+        }
+    ];
+
+    // Array of philosophical aphorisms
+    const aphorisms = [
+        {
+            text: "The happiness of a person is never the same as the happiness he thinks he has.",
+            author: "Arthur Schopenhauer"
+        },
+        {
+            text: "To live is to suffer, to survive is to find some meaning in the suffering.",
+            author: "Friedrich Nietzsche"
+        },
+        {
+            text: "Those who lack the courage will always find a philosophy to justify it.",
+            author: "Albert Camus"
+        },
+        {
+            text: "Most people do not really want freedom, because freedom involves responsibility, and most people are frightened of responsibility.",
+            author: "Sigmund Freud"
+        },
+        {
+            text: "Man is a tragic animal. Not because of his smallness, but because he is too well endowed.",
+            author: "Peter Wessel Zapffe"
+        },
+        {
+            text: "We are all in the gutter, but some of us are looking at the stars.",
+            author: "Oscar Wilde"
+        },
+        {
+            text: "Anxiety is the dizziness of freedom.",
+            author: "Søren Kierkegaard"
+        },
+        {
+            text: "The universe is not hostile, nor yet is it friendly. It is simply indifferent.",
+            author: "John Dewey"
+        },
+        {
+            text: "Existence precedes essence.",
+            author: "Jean-Paul Sartre"
+        },
+        {
+            text: "The most thought-provoking thing in our thought-provoking time is that we are still not thinking.",
+            author: "Martin Heidegger"
+        }
+    ];
+        
+        class QuizApp {
+            constructor(questions) {
+                this.questions = questions;
+                this.currentQuestion = 0;
+                this.score = 0;
+                this.totalQuestions = questions.length;
+                this.answers = Array(questions.length).fill(null);
+                this.feedbackShown = false;
+                this.animationRunning = false;
+                this.animationId = null; // Initialize animation ID
+            }
+            showRandomAphorism() {
+                const randomIndex = Math.floor(Math.random() * aphorisms.length);
+                const aphorism = aphorisms[randomIndex];
+                
+                document.getElementById("random-aphorism").textContent = aphorism.text;
+                document.getElementById("aphorism-author").textContent = `— ${aphorism.author}`;
+            }
+            startAnimation() {
+                this.animationRunning = true;
+                this.animate();
+            }
+
+            // Lines 428-430
+            stopAnimation() {
+                this.animationRunning = false;
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                    this.animationId = null; // Clear the ID reference
+                }
+            }
+
+            animate() {
+                if (!this.animationRunning) {
+                    return;
+                }
+                
+                const container = document.getElementById("animation-container");
+                const obj = document.getElementById("moving-object");
+                
+                const containerWidth = container.offsetWidth;
+                const containerHeight = container.offsetHeight;
+                const objWidth = obj.offsetWidth;
+                const objHeight = obj.offsetHeight;
+                
+                // Different animation based on question type
+                const qType = this.questions[this.currentQuestion].type;
+                
+                if (qType === "multiple_choice") {
+                    // Bouncing animation
+                    const t = Date.now() * 0.003;
+                    const x = Math.floor((containerWidth - objWidth) * (0.5 + 0.4 * Math.sin(t)));
+                    const y = Math.floor((containerHeight - objHeight) * (0.5 + 0.4 * Math.cos(t * 1.3)));
+                    obj.style.backgroundColor = "#3498db";
+                    obj.innerHTML = "MC";
+                    obj.style.left = `${x}px`;
+                    obj.style.top = `${y}px`;
+                } else if (qType === "short_answer") {
+                    // Circular motion
+                    const t = Date.now() * 0.002;
+                    const radius = Math.min(containerWidth, containerHeight) * 0.3;
+                    const x = Math.floor((containerWidth - objWidth) / 2 + radius * Math.cos(t));
+                    const y = Math.floor((containerHeight - objHeight) / 2 + radius * Math.sin(t));
+                    obj.style.backgroundColor = "#e74c3c";
+                    obj.innerHTML = "SA";
+                    obj.style.left = `${x}px`;
+                    obj.style.top = `${y}px`;
+                } else if (qType === "fill_blank") {
+                    // Zig-zag motion
+                    const t = Date.now() * 0.003;
+                    const x = Math.floor(t % containerWidth) % (containerWidth - objWidth);
+                    const y = Math.floor((containerHeight - objHeight) * (0.5 + 0.3 * Math.sin(t * 5)));
+                    obj.style.backgroundColor = "#2ecc71";
+                    obj.innerHTML = "FB";
+                    obj.style.left = `${x}px`;
+                    obj.style.top = `${y}px`;
+                }
+                
+                // Request next animation frame
+                const self = this;
+                this.animationId = requestAnimationFrame(() => self.animate());
+            }
+
+            renderQuestions() {
+                const container = document.getElementById("questions");
+                container.innerHTML = "";
+                
+                for (let i = 0; i < this.questions.length; i++) {
+                    const q = this.questions[i];
+                    const questionDiv = q.render(i, this.answers[i]);
+                    
+                    if (i === this.currentQuestion) {
+                        questionDiv.classList.add("active-question");
+                    }
+                    
+                    // Add feedback div
+                    const feedbackDiv = document.createElement("div");
+                    feedbackDiv.id = `feedback_${i}`;
+                    feedbackDiv.className = "feedback hidden";
+                    questionDiv.appendChild(feedbackDiv);
+                    
+                    container.appendChild(questionDiv);
+                }
+                
+                this.updateButtons();
+                this.updateProgress();
+            }
+
+            nextQuestion() {
+                // Save current answer
+                this.saveCurrentAnswer();
+                
+                // Hide feedback
+                this.hideFeedback();
+                
+                // Move to next question
+                this.currentQuestion = Math.min(this.currentQuestion + 1, this.totalQuestions - 1);
+                
+                // Update display
+                this.updateQuestionDisplay();
+                this.updateButtons();
+                this.updateProgress();
+            }
+
+            prevQuestion() {
+                // Save current answer
+                this.saveCurrentAnswer();
+                
+                // Hide feedback
+                this.hideFeedback();
+                
+                // Move to previous question
+                this.currentQuestion = Math.max(this.currentQuestion - 1, 0);
+                
+                // Update display
+                this.updateQuestionDisplay();
+                this.updateButtons();
+                this.updateProgress();
+            }
+
+            // Line 512 in updateQuestionDisplay method
+            updateQuestionDisplay() {
+                const questionsElements = document.getElementsByClassName("question-container");
+                
+                for (let i = 0; i < questionsElements.length; i++) {
+                    if (i === this.currentQuestion) {
+                        questionsElements[i].classList.add("active-question");
+                    } else {
+                        questionsElements[i].classList.remove("active-question");
+                    }
+                }
+                
+                // Restart animation for new question with delay
+                this.stopAnimation();
+                
+                // Small delay to ensure animation cleanup is complete
+                setTimeout(() => {
+                    this.startAnimation();
+                }, 10);
+            }
+
+            saveCurrentAnswer() {
+                const currentQ = this.currentQuestion;
+                const q = this.questions[currentQ];
+                
+                this.answers[currentQ] = q.getCurrentAnswer(currentQ);
+            }
+
+            checkAnswer() {
+                const currentQ = this.currentQuestion;
+                const q = this.questions[currentQ];
+                
+                // Get the current answer directly from the question instead of stored answers
+                const userAnswer = q.getCurrentAnswer(currentQ);  // This line is changed
+                
+                const feedbackDiv = document.getElementById(`feedback_${currentQ}`);
+                feedbackDiv.classList.remove("hidden");
+                
+                if (q.checkAnswer(userAnswer)) {
+                    feedbackDiv.innerHTML = "Correct!";
+                    feedbackDiv.className = "feedback correct";
+                    this.score += 1;
+                } else {
+                    feedbackDiv.innerHTML = `Incorrect. The correct answer is: ${q.answer}`;
+                    feedbackDiv.className = "feedback incorrect";
+                }
+                
+                // Now store the answer after checking
+                this.answers[currentQ] = userAnswer;
+                
+                this.feedbackShown = true;
+                this.updateButtons();
+                this.updateScore();
+                
+                const nextBtn = document.getElementById("next-btn");
+
+                if (this.currentQuestion === this.totalQuestions - 1) {
+                    nextBtn.innerHTML = "Finish Quiz";
+                    nextBtn.onclick = () => this.showResults();
+                } else {
+                    nextBtn.innerHTML = "Next";
+                    nextBtn.onclick = () => this.nextQuestion();
+                }
+                
+                
+            }
+
+            hideFeedback() {
+                const currentQ = this.currentQuestion;
+                const feedbackDiv = document.getElementById(`feedback_${currentQ}`);
+                if (feedbackDiv) {
+                    feedbackDiv.classList.add("hidden");
+                }
+                this.feedbackShown = false;
+            }
+
+            updateButtons() {
+                const prevBtn = document.getElementById("prev-btn");
+                const nextBtn = document.getElementById("next-btn");
+                const submitBtn = document.getElementById("submit-btn");
+                
+                // Disable previous button if at the first question
+                prevBtn.disabled = this.currentQuestion === 0;
+                
+                // Hide next button and show submit button when answer not yet checked
+                if (this.feedbackShown) {
+                    submitBtn.classList.add("hidden");
+                    nextBtn.classList.remove("hidden");
+                } else {
+                    nextBtn.classList.add("hidden");
+                    submitBtn.classList.remove("hidden");
+                }
+                
+                // Disable next button if at the last question
+                nextBtn.disabled = false;
+            }
+
+            updateProgress() {
+                const progress = document.getElementById("progress");
+                const progressPercent = ((this.currentQuestion + 1) / this.totalQuestions) * 100;
+                progress.style.width = `${progressPercent}%`;
+            }
+
+            updateScore() {
+                const scoreDisplay = document.getElementById("score-display");
+                scoreDisplay.innerHTML = `Score: ${this.score}/${this.totalQuestions}`;
+            }
+
+            init() {
+                this.renderQuestions();
+                this.updateScore();
+                this.startAnimation();
+                document.getElementById("prev-btn").addEventListener("click", () => this.prevQuestion());
+                document.getElementById("next-btn").addEventListener("click", () => this.nextQuestion());
+                document.getElementById("submit-btn").addEventListener("click", () => this.checkAnswer());
+            }
+            
+            showResults() {
+                // Hide quiz container
+                document.getElementById("quiz-container").style.display = "none";
+    
+                // Show results container - Add this line
+                document.getElementById("results-container").style.display = "block";
+                
+                // Update final score
+                document.getElementById("final-score").textContent = `${this.score}/${this.totalQuestions}`;
+                
+                // Display random aphorism
+                this.showRandomAphorism();
+                
+                // Initialize philosopher tabs
+                this.initPhilosopherTabs();
+            }
+                
+            
+            
+            
+            initPhilosopherTabs() {
+                const tabsContainer = document.getElementById("philosopher-tabs");
+                const contentContainer = document.getElementById("philosopher-content");
+                
+                // Clear existing content
+                tabsContainer.innerHTML = "";
+                contentContainer.innerHTML = "";
+                
+                // Create tabs and content
+                philosopherDetails.forEach((philosopher, index) => {
+                    // Around line 849 - Inside initPhilosopherTabs method
+                    // Store reference to the quiz instance
+                    const self = this;
+
+                    // Create tab button
+                    // Create tab button
+                    const tabButton = document.createElement("button");
+                    tabButton.className = "tab-button" + (index === 0 ? " active" : "");
+                    tabButton.textContent = philosopher.name;
+                    tabButton.onclick = () => this.switchPhilosopherTab(philosopher.id);  // Use 'this' instead of 'self'
+                    tabsContainer.appendChild(tabButton);
+                    
+                    // Create tab content
+                    const tabContent = document.createElement("div");
+                    tabContent.className = "philosopher-tab" + (index === 0 ? " active" : "");
+                    tabContent.id = `tab-${philosopher.id}`;
+                    
+                    // Header with image and name
+                    const header = document.createElement("div");
+                    header.className = "philosopher-header";
+                    
+                    const image = document.createElement("div");
+                    image.className = "philosopher-image-small";
+                    image.style.backgroundImage = `url('${philosopher.image}')`;
+                    header.appendChild(image);
+                    
+                    const nameHeader = document.createElement("div");
+                    nameHeader.className = "philosopher-name-header";
+                    
+                    const nameH3 = document.createElement("h3");
+                    nameH3.textContent = philosopher.name;
+                    nameHeader.appendChild(nameH3);
+                    
+                    const yearsP = document.createElement("p");
+                    yearsP.textContent = philosopher.years;
+                    nameHeader.appendChild(yearsP);
+                    
+                    header.appendChild(nameHeader);
+                    tabContent.appendChild(header);
+                    
+                    // Key ideas
+                    const ideaSection = document.createElement("div");
+                    ideaSection.className = "philosopher-info-card";
+                    
+                    const ideasH4 = document.createElement("h4");
+                    ideasH4.textContent = "Key Ideas";
+                    ideaSection.appendChild(ideasH4);
+                    
+                    const ideasList = document.createElement("ul");
+                    philosopher.keyIdeas.forEach(idea => {
+                        const ideaItem = document.createElement("li");
+                        ideaItem.textContent = idea;
+                        ideasList.appendChild(ideaItem);
+                    });
+                    ideaSection.appendChild(ideasList);
+                    
+                    // Details section
+                    const detailsDiv = document.createElement("div");
+                    detailsDiv.className = "philosopher-details";
+                    detailsDiv.appendChild(ideaSection);
+                    
+                    // History
+                    const historySection = document.createElement("div");
+                    historySection.className = "philosopher-info-card";
+                    
+                    const historyH4 = document.createElement("h4");
+                    historyH4.textContent = "Life & History";
+                    historySection.appendChild(historyH4);
+                    
+                    const historyP = document.createElement("p");
+                    historyP.textContent = philosopher.history;
+                    historySection.appendChild(historyP);
+                    
+                    detailsDiv.appendChild(historySection);
+                    
+                    // Beliefs
+                    const beliefsSection = document.createElement("div");
+                    beliefsSection.className = "philosopher-info-card";
+                    
+                    const beliefsH4 = document.createElement("h4");
+                    beliefsH4.textContent = "Philosophical Beliefs";
+                    beliefsSection.appendChild(beliefsH4);
+                    
+                    const beliefsP = document.createElement("p");
+                    beliefsP.textContent = philosopher.beliefs;
+                    beliefsSection.appendChild(beliefsP);
+                    
+                    detailsDiv.appendChild(beliefsSection);
+                    
+                    // Legacy
+                    const legacySection = document.createElement("div");
+                    legacySection.className = "philosopher-info-card";
+                    
+                    const legacyH4 = document.createElement("h4");
+                    legacyH4.textContent = "Legacy & Influence";
+                    legacySection.appendChild(legacyH4);
+                    
+                    const legacyP = document.createElement("p");
+                    legacyP.textContent = philosopher.legacy;
+                    legacySection.appendChild(legacyP);
+                    
+                    detailsDiv.appendChild(legacySection);
+                    
+                    tabContent.appendChild(detailsDiv);
+                    contentContainer.appendChild(tabContent);
+                });
+            }
+            
+            switchPhilosopherTab(philosopherId) {
+                // Update active tab button
+                const tabButtons = document.querySelectorAll(".tab-button");
+                tabButtons.forEach(btn => {
+                    btn.classList.remove("active");
+                });
+                
+                // Find the button that triggered this and make it active
+                const philosopherData = philosopherDetails.find(p => p.id === philosopherId);
+                if (!philosopherData) return; // Safely exit if no match
+                
+                const activeButton = Array.from(tabButtons).find(btn => 
+                    btn.textContent === philosopherData.name
+                );
+                
+                if (activeButton) {
+                    activeButton.classList.add("active");
+                }
+                
+                // Update active tab content
+                const tabContents = document.querySelectorAll(".philosopher-tab");
+                tabContents.forEach(tab => {
+                    tab.classList.remove("active");
+                });
+                
+                document.getElementById(`tab-${philosopherId}`).classList.add("active");
+            }
+        }
+
+        // Create quiz questions using the classes
+        const quizQuestions = [
+            new MultipleChoiceQuestion(
+                "Which philosopher wrote 'The World as Will and Representation'?",
+                ["Arthur Schopenhauer", "Friedrich Nietzsche", "Sigmund Freud", "Albert Camus"],
+                "Arthur Schopenhauer"
+            ),
+            new ShortAnswerQuestion(
+                "Which philosopher is known for the concept of 'the absurd'?",
+                "Albert Camus"
+            ),
+            new FillBlankQuestion(
+                "The concept of 'eternal recurrence' was proposed by _______.",
+                "Friedrich Nietzsche"
+            ),
+            new MultipleChoiceQuestion(
+                "Which work was written by Jean-Paul Sartre?",
+                ["Being and Time", "Being and Nothingness", "The Myth of Sisyphus", "The Birth of Tragedy"],
+                "Being and Nothingness"
+            ),
+            new ShortAnswerQuestion(
+                "What philosophical movement is associated with Sartre and Camus?",
+                "Existentialism"
+            ),
+            new FillBlankQuestion(
+                "Schopenhauer was heavily influenced by _______ philosophy.",
+                "Buddhist"
+            ),
+            new ShortAnswerQuestion(
+                "Who wrote 'The Myth of Sisyphus'?",
+                "Albert Camus"
+            ),
+            new MultipleChoiceQuestion(
+                "Which philosopher influenced Nietzsche's early thinking?",
+                ["Arthur Schopenhauer", "Sigmund Freud", "Albert Camus", "Peter Wessel Zapffe"],
+                "Arthur Schopenhauer"
+            ),
+        ];
+
+        // Initialize quiz application
+        let quizApp = new QuizApp(quizQuestions);
+
+        // Startup Animation Functions
+        function runPhilosopherAnimation() {
+            const startupContainer = document.getElementById("startup-container");
+            let currentPhilosopher = 0;
+            
+            // Create philosopher elements
+            philosophers.forEach((philosopher, index) => {
+                const philosopherDiv = document.createElement("div");
+                philosopherDiv.className = "philosopher";
+                philosopherDiv.id = `philosopher-${index}`;
+                
+                const contentDiv = document.createElement("div");
+                contentDiv.className = "philosopher-content";
+                
+                // Around line 1061-1065
+                // Create image or ASCII art
+                // Create image or ASCII art
+                if (philosopher.useAscii) {
+                    const asciiDiv = document.createElement("div");
+                    asciiDiv.className = "ascii-art";
+                    asciiDiv.textContent = philosopher.ascii || `${philosopher.name[0]}`; // Add fallback if ascii property is missing
+                    contentDiv.appendChild(asciiDiv);
+                } else {
+                    const imageDiv = document.createElement("div");
+                    imageDiv.className = "philosopher-image";
+                    
+                    if (philosopher.image) {
+                        imageDiv.style.backgroundImage = `url('${philosopher.image}')`;
+                        
+                        // Add error handling for image loading
+                        const img = new Image();
+                        img.onerror = function() {
+                            imageDiv.style.backgroundColor = "#333";
+                            imageDiv.innerHTML = `<div style="color:white;text-align:center;padding-top:50%;">${philosopher.name[0]}</div>`;
+                        };
+                        img.src = philosopher.image;
+                    } else {
+                        // Fallback if image property is missing
+                        imageDiv.style.backgroundColor = "#333";
+                        imageDiv.innerHTML = `<div style="color:white;text-align:center;padding-top:50%;">${philosopher.name[0]}</div>`;
+                    }
+                    
+                    contentDiv.appendChild(imageDiv);
+                }
+                
+                // Create info div
+                const infoDiv = document.createElement("div");
+                infoDiv.className = "philosopher-info";
+                
+                const nameH2 = document.createElement("h2");
+                nameH2.className = "philosopher-name";
+                nameH2.textContent = philosopher.name;
+                infoDiv.appendChild(nameH2);
+                
+                const quoteP = document.createElement("p");
+                quoteP.className = "philosopher-quote";
+                quoteP.textContent = philosopher.quote;
+                infoDiv.appendChild(quoteP);
+                
+                contentDiv.appendChild(infoDiv);
+                philosopherDiv.appendChild(contentDiv);
+                
+                // Alternate left and right philosopher display
+                if (index % 2 === 1) {
+                    philosopherDiv.classList.add("name-left");
+                }
+                
+                startupContainer.appendChild(philosopherDiv);
+            });
+            
+            // Show first philosopher
+            document.getElementById(`philosopher-0`).style.opacity = 1;
+            
+            // Cycle through philosophers
+            const cycleInterval = setInterval(() => {
+                // Hide current philosopher
+                document.getElementById(`philosopher-${currentPhilosopher}`).style.opacity = 0;
+                
+                // Move to next philosopher
+                currentPhilosopher = (currentPhilosopher + 1) % philosophers.length;
+                
+                // Show next philosopher
+                document.getElementById(`philosopher-${currentPhilosopher}`).style.opacity = 1;
+                
+                // If we've shown all philosophers, prepare to end animation
+                if (currentPhilosopher === philosophers.length - 1) {
+                    clearInterval(cycleInterval);
+                    
+                    // Wait for last philosopher to be shown fully
+                    setTimeout(() => {
+                        // First hide the philosopher
+                        document.getElementById(`philosopher-${currentPhilosopher}`).style.opacity = 0;
+    
+                        // Then after 1 second, shrink the container
+                        setTimeout(() => {
+                            // Shrink container
+                            startupContainer.classList.add("shrink");
+        
+                            // Show Start Quiz button
+                            const startBtn = document.getElementById("start-quiz-btn");
+                            startBtn.style.display = "block";
+        
+                            // Show shrink title
+                            const shrinkTitle = document.getElementById("shrink-title");
+                            shrinkTitle.style.opacity = 1;
+        
+                            // Hide other elements
+                            document.querySelector(".startup-title").style.opacity = 0;
+                            document.querySelector(".startup-subtitle").style.opacity = 0;
+                        }, 1000);
+                    }, 2000);
+                }
+            }, 4000); // Change philosopher every 4 seconds
+        }
+
+        // Start the quiz when button is clicked
+        document.getElementById("start-quiz-btn").addEventListener("click", function() {
+            // Hide startup container
+            document.getElementById("startup-container").style.display = "none";
+            
+            // Show quiz container
+            document.getElementById("quiz-container").style.display = "block";
+            
+            // Initialize quiz
+            quizApp.init();
+        });
+
+    // Start the philosopher animation when page loads
+        window.addEventListener("load", function() {
+            runPhilosopherAnimation();
+        
+        // Add these event listeners after the DOM is fully loaded
+        document.getElementById("new-aphorism-btn").addEventListener("click", function() {
+            quizApp.showRandomAphorism();
+        });
+        
+
+        document.getElementById("retry-quiz-btn").addEventListener("click", function() {
+            // Hide results container
+            document.getElementById("results-container").style.display = "none";
+            
+            // Show quiz container
+            document.getElementById("quiz-container").style.display = "block";
+            
+            // Reset quiz
+            quizApp = new QuizApp(quizQuestions);
+            quizApp.init();
+        });
+    });
+    </script>
 </body>
 </html>
