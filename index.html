@@ -126,7 +126,7 @@
             text-align: center;
             margin: 20px 0;
         }
-        /* Philosopher animation styles */
+    /* Philosopher animation styles */
         .startup-container {
             position: fixed;
             top: 0;
@@ -238,7 +238,7 @@
             transform: scale(1.05);
             transition: all 0.2s ease;
         }
-        /* ASCII Art for terminal style */
+        
         .ascii-art {
             font-family: monospace;
             font-size: 10px;
@@ -258,285 +258,313 @@
             align-items: center;
             justify-content: center;
         }
-            .results-container {
-                background-color: white;
-                border-radius: 10px;
-                padding: 30px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                max-width: 800px;
-                margin: 20px auto;
-            }
-            
-            .score-summary {
-                text-align: center;
-                margin-bottom: 30px;
-                padding: 20px;
-                background-color: #f9f9f9;
-                border-radius: 8px;
-            }
-            
-            .action-btn {
-                background-color: #e74c3c;
-                color: white;
-                padding: 12px 25px;
-                border: none;
-                border-radius: 30px;
-                font-size: 18px;
-                cursor: pointer;
-                transition: all 0.2s ease;
-                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-            }
-            
-            .action-btn:hover {
-                background-color: #c0392b;
-                transform: translateY(-2px);
-            }
-            
-            .secondary-btn {
-                background-color: #3498db;
-                color: white;
-                padding: 8px 16px;
-                border: none;
-                border-radius: 20px;
-                font-size: 14px;
-                cursor: pointer;
-                transition: all 0.2s ease;
-            }
-            
-            .secondary-btn:hover {
-                background-color: #2980b9;
-            }
-            
-            .aphorism-section {
-                margin: 30px 0;
-                text-align: center;
-            }
-            
-            .aphorism-card {
-                background-color: #1a1a1a;
-                color: #f0f0f0;
-                padding: 25px;
-                border-radius: 8px;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-                margin-bottom: 15px;
-                position: relative;
-            }
-            
-            .aphorism-text {
-                font-size: 22px;
-                font-style: italic;
-                margin-bottom: 10px;
-                line-height: 1.4;
-            }
-            
-            .aphorism-author {
-                font-size: 16px;
-                text-align: right;
-                margin-top: 15px;
-                font-weight: bold;
-                color: #bdc3c7;
-            }
-            
-            .philosophers-section {
-                margin-top: 40px;
-            }
-            
-            .philosophers-tabs {
-                background-color: #f9f9f9;
-                border-radius: 8px;
-                overflow: hidden;
-            }
-            
-            .tab-buttons {
-                display: flex;
-                flex-wrap: wrap;
-                background-color: #121212;
-            }
-            
-            .tab-button {
-                padding: 12px 18px;
-                background-color: transparent;
-                border: none;
-                color: #f0f0f0;
-                cursor: pointer;
-                font-size: 16px;
-                transition: all 0.2s ease;
-                flex-grow: 1;
-            }
-            
-            .tab-button:hover {
-                background-color: rgba(255, 255, 255, 0.1);
-            }
-            
-            .tab-button.active {
-                background-color: #e74c3c;
-                font-weight: bold;
-            }
-            
-            .tab-content {
-                padding: 20px;
-            }
-            
-            .philosopher-tab {
-                display: none;
-            }
-            
-            .philosopher-tab.active {
-                display: block;
-            }
-            
-            .philosopher-header {
-                display: flex;
-                align-items: center;
-                margin-bottom: 20px;
-            }
-            
-            .philosopher-image-small {
-                width: 80px;
-                height: 80px;
-                border-radius: 50%;
-                margin-right: 20px;
-                background-size: cover;
-                background-position: center;
-                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-            }
-            
-            .philosopher-name-header {
-                flex-grow: 1;
-            }
-            
-            .philosopher-name-header h3 {
-                margin: 0;
-                font-size: 24px;
-            }
-            
-            .philosopher-name-header p {
-                margin: 5px 0 0;
-                color: #666;
-            }
-            
+        .results-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        
+        .score-summary {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .action-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .action-btn:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        .secondary-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .secondary-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .aphorism-section {
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .aphorism-card {
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .aphorism-text {
+            font-size: 22px;
+            font-style: italic;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .aphorism-author {
+            font-size: 16px;
+            text-align: right;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #bdc3c7;
+        }
+        
+        .philosophers-section {
+            margin-top: 40px;
+        }
+        
+        .philosophers-tabs {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #121212;
+        }
+        
+        .tab-button {
+            padding: 12px 18px;
+            background-color: transparent;
+            border: none;
+            color: #f0f0f0;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            flex-grow: 1;
+        }
+        
+        .tab-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .tab-button.active {
+            background-color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            padding: 20px;
+        }
+        
+        .philosopher-tab {
+            display: none;
+        }
+        
+        .philosopher-tab.active {
+            display: block;
+        }
+        
+        .philosopher-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .philosopher-image-small {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 20px;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .philosopher-name-header {
+            flex-grow: 1;
+        }
+        
+        .philosopher-name-header h3 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .philosopher-name-header p {
+            margin: 5px 0 0;
+            color: #666;
+        }
+        
+        .philosopher-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .philosopher-info-card {
+            flex-basis: calc(50% - 10px);
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .philosopher-info-card h4 {
+            margin-top: 0;
+            color: #e74c3c;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        
+        @media (max-width: 768px) {
             .philosopher-details {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 20px;
+                flex-direction: column;
             }
             
             .philosopher-info-card {
-                flex-basis: calc(50% - 10px);
-                background-color: #fff;
-                border-radius: 8px;
-                padding: 15px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                flex-basis: 100%;
             }
-            
-            .philosopher-info-card h4 {
-                margin-top: 0;
-                color: #e74c3c;
-                border-bottom: 1px solid #eee;
-                padding-bottom: 8px;
-            }
-            
-            @media (max-width: 768px) {
-                .philosopher-details {
-                    flex-direction: column;
-                }
-                
-                .philosopher-info-card {
-                    flex-basis: 100%;
-                }
-            }
-            
-            /* Modern UI Improvements for question segment */
-            .question-container {
-                margin-bottom: 25px;
-                padding: 25px;
-                border: none;
-                border-radius: 10px;
-                background-color: #fff;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-                transition: all 0.3s ease;
-            }
-            
-            .question-container h3 {
-                font-size: 20px;
-                margin-top: 0;
-                color: #333;
-                border-bottom: 2px solid #f0f0f0;
-                padding-bottom: 15px;
-            }
-            
-            .question-container input[type="radio"] {
-                display: none;
-            }
-            
-            .question-container label {
-                display: block;
-                padding: 12px 15px;
-                margin: 8px 0;
-                border-radius: 6px;
-                background-color: #f9f9f9;
-                cursor: pointer;
-                transition: all 0.2s ease;
-                font-size: 16px;
-            }
-            
-            .question-container label:hover {
-                background-color: #f0f0f0;
-            }
-            
-            .question-container input[type="radio"]:checked + label {
-                background-color: #3498db;
-                color: white;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            }
-            
-            .question-container input[type="text"] {
-                width: 100%;
-                padding: 12px 15px;
-                font-size: 16px;
-                border: 2px solid #e0e0e0;
-                border-radius: 6px;
-                transition: all 0.2s ease;
-                margin-top: 15px;
-            }
-            
-            .question-container input[type="text"]:focus {
-                border-color: #3498db;
-                outline: none;
-                box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
-            }
-            
-            .feedback {
-                margin-top: 15px;
-                padding: 12px 15px;
-                border-radius: 6px;
-                font-weight: bold;
-                animation: fadeIn 0.5s ease;
-            }
-            
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(10px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            
-            .navigation {
-                margin-top: 30px;
-            }
-            
-            .navigation button {
-                padding: 12px 25px;
-                border-radius: 30px;
-                font-size: 16px;
-                font-weight: bold;
-                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-                transition: all 0.2s ease;
-            }
-            
-            .navigation button:hover:not(:disabled) {
-                transform: translateY(-2px);
-                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
-            }
-            
+        }
+        
+        /* Modern UI Improvements for question segment */
+        .question-container {
+            margin-bottom: 25px;
+            padding: 25px;
+            border: none;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .question-container h3 {
+            font-size: 20px;
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+        
+        .question-container input[type="radio"] {
+            display: none;
+        }
+        
+        .question-container label {
+            display: block;
+            padding: 12px 15px;
+            margin: 8px 0;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 16px;
+        }
+        
+        .question-container label:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .question-container input[type="radio"]:checked + label {
+            background-color: #3498db;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .question-container input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            margin-top: 15px;
+        }
+        
+        .question-container input[type="text"]:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .navigation {
+            margin-top: 30px;
+        }
+        
+        .navigation button {
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+        
+        .navigation button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+        }
+        /* Bottom-left skip buttons styling */
+        #skip-controls button,
+        #skip-quiz-btn {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border: none;
+            padding: 10px 18px;
+            font-size: 14px;
+            border-radius: 25px;
+            margin: 5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: all 0.25s ease;
+            font-weight: 600;
+        }
+
+        #skip-controls button:hover,
+        #skip-quiz-btn:hover {
+            background-color: #34495e;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        #skip-controls {
+            flex-direction: row;
+        }
+        
+        #skip-quiz-wrapper {
+            flex-direction: row;
+        }
         
     </style>
 </head>
@@ -557,7 +585,7 @@
             <div class="progress-bar">
                 <div id="progress"></div>
             </div>
-            <div class="score-display" id="score-display">Score: 0/10</div>
+            <div class="score-display" id="score-display"></div>
             <div class="animation-container" id="animation-container">
                 <div class="moving-object" id="moving-object">Q</div>
             </div>
@@ -1053,16 +1081,9 @@
                 this.feedbackShown = true;
                 this.updateButtons();
                 this.updateScore();
-                
-                const nextBtn = document.getElementById("next-btn");
 
-                if (this.currentQuestion === this.totalQuestions - 1) {
-                    nextBtn.innerHTML = "Finish Quiz";
-                    nextBtn.onclick = () => this.showResults();
-                } else {
-                    nextBtn.innerHTML = "Next";
-                    nextBtn.onclick = () => this.nextQuestion();
-                }
+                const nextBtn = document.getElementById("next-btn");
+                nextBtn.innerHTML = (this.currentQuestion === this.totalQuestions - 1) ? "Finish Quiz" : "Next";
                 
                 
             }
@@ -1113,7 +1134,13 @@
                 this.updateScore();
                 this.startAnimation();
                 document.getElementById("prev-btn").addEventListener("click", () => this.prevQuestion());
-                document.getElementById("next-btn").addEventListener("click", () => this.nextQuestion());
+                document.getElementById("next-btn").addEventListener("click", () => {
+                    if (this.currentQuestion === this.totalQuestions - 1) {
+                        this.showResults();
+                    } else {
+                        this.nextQuestion();
+                    }
+                });
                 document.getElementById("submit-btn").addEventListener("click", () => this.checkAnswer());
             }
             
@@ -1287,11 +1314,6 @@
                 "The concept of 'eternal recurrence' was proposed by _______.",
                 "Friedrich Nietzsche"
             ),
-            new MultipleChoiceQuestion(
-                "Which work was written by Jean-Paul Sartre?",
-                ["Being and Time", "Being and Nothingness", "The Myth of Sisyphus", "The Birth of Tragedy"],
-                "Being and Nothingness"
-            ),
             new ShortAnswerQuestion(
                 "What philosophical movement is associated with Sartre and Camus?",
                 "Existentialism"
@@ -1315,6 +1337,7 @@
         let quizApp = new QuizApp(quizQuestions);
 
         // Startup Animation Functions
+        let philosopherCycleInterval = null;
         function runPhilosopherAnimation() {
             const startupContainer = document.getElementById("startup-container");
             let currentPhilosopher = 0;
@@ -1388,7 +1411,7 @@
             document.getElementById(`philosopher-0`).style.opacity = 1;
             
             // Cycle through philosophers
-            const cycleInterval = setInterval(() => {
+            philosopherCycleInterval = setInterval(() => {
                 // Hide current philosopher
                 document.getElementById(`philosopher-${currentPhilosopher}`).style.opacity = 0;
                 
@@ -1400,7 +1423,7 @@
                 
                 // If we've shown all philosophers, prepare to end animation
                 if (currentPhilosopher === philosophers.length - 1) {
-                    clearInterval(cycleInterval);
+                    clearInterval(philosopherCycleInterval);
                     
                     // Wait for last philosopher to be shown fully
                     setTimeout(() => {
@@ -1444,6 +1467,43 @@
     // Start the philosopher animation when page loads
         window.addEventListener("load", function() {
             runPhilosopherAnimation();
+        // Skip animation only
+        document.getElementById("skip-animation-btn").addEventListener("click", function() {
+            // Stop philosopher cycle interval
+            if (philosopherCycleInterval) {
+                clearInterval(philosopherCycleInterval);
+                philosopherCycleInterval = null;
+            }
+        
+            // Hide all philosophers
+            philosophers.forEach((_, i) => {
+                const el = document.getElementById(`philosopher-${i}`);
+                if (el) el.style.opacity = 0;
+            });
+        
+            // Shrink UI
+            const startupContainer = document.getElementById("startup-container");
+            startupContainer.classList.add("shrink");
+        
+            setTimeout(() => {
+                document.getElementById("start-quiz-btn").style.display = "block";
+                document.getElementById("shrink-title").style.opacity = 1;
+                document.querySelector(".startup-title").style.opacity = 0;
+                document.querySelector(".startup-subtitle").style.opacity = 0;
+                document.getElementById("skip-controls").style.display = "none";
+                document.getElementById("skip-quiz-wrapper").style.display = "block";
+            }, 1000);
+        });
+
+        // Skip animation and quiz
+        document.getElementById("skip-all-btn").addEventListener("click", function() {
+            window.location.href = "philosophers.html?score=0/8";
+        });
+
+        // Skip quiz after animation
+        document.getElementById("skip-quiz-btn").addEventListener("click", function() {
+            window.location.href = "philosophers.html?score=" + quizApp.score + "/" + quizApp.totalQuestions;
+        });
         
         // Add these event listeners after the DOM is fully loaded
         document.getElementById("new-aphorism-btn").addEventListener("click", function() {
@@ -1464,5 +1524,13 @@
         });
     });
     </script>
+    <div id="skip-controls" style="position: fixed; bottom: 20px; left: 20px; z-index: 1100;">
+        <button id="skip-animation-btn">Skip Animation</button>
+        <button id="skip-all-btn">Skip Animation and Quiz</button>
+    </div>
+    
+    <div id="skip-quiz-wrapper" style="position: fixed; bottom: 20px; left: 20px; z-index: 1100; display: none;">
+        <button id="skip-quiz-btn">Skip Quiz</button>
+    </div>
 </body>
 </html>
