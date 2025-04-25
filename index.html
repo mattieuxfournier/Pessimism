@@ -1118,20 +1118,8 @@
             }
             
             showResults() {
-                // Hide quiz container
-                document.getElementById("quiz-container").style.display = "none";
-    
-                // Show results container - Add this line
-                document.getElementById("results-container").style.display = "block";
-                
-                // Update final score
-                document.getElementById("final-score").textContent = `${this.score}/${this.totalQuestions}`;
-                
-                // Display random aphorism
-                this.showRandomAphorism();
-                
-                // Initialize philosopher tabs
-                this.initPhilosopherTabs();
+                // Redirect to philosophers.html with score as URL parameter
+                window.location.href = `philosophers.html?score=${this.score}/${this.totalQuestions}`;
             }
                 
             

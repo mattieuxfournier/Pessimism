@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Philosophical Minds | Home</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #e74c3c;
+            --accent: #3498db;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --text: #333;
+            --text-light: #7f8c8d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            font-weight: 300;
+        }
+        
+        .score-display {
+            background: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            display: inline-block;
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+        
+        .philosophers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .philosopher-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+        
+        .philosopher-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        
+        .philosopher-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .philosopher-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+        }
+        
+        .philosopher-name {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            color: white;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            z-index: 2;
+        }
+        
+        .philosopher-info {
+            padding: 1.5rem;
+        }
+        
+        .philosopher-quote {
+            font-style: italic;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        
+            display: -webkit-box;                 
+            -webkit-box-orient: vertical;        
+            -webkit-line-clamp: 3;               
+            overflow: hidden;                    
+        
+            display: block;                      
+            max-height: 4.5em;                   
+            line-height: 1.5em;
+            text-overflow: ellipsis;
+            white-space: normal;
+        }
+        
+        .explore-btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: background 0.3s ease;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .explore-btn:hover {
+            background: #c0392b;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .philosophers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Philosophical Minds</h1>
+            <p class="subtitle">Explore the thoughts of history's greatest pessimistic thinkers</p>
+            <a href="shortstory.html" class="explore-btn" style="margin-top: 1.5rem; max-width: 300px;">View Creative Project</a>
+            <div id="score-display" class="score-display"></div>
+        </header>
+        
+        <div class="philosophers-grid">
+            <!-- Schopenhauer Card -->
+            <div class="philosopher-card">
+                <div class="philosopher-image" style="background-image: url('schopenhauer-bg.jpg');">
+                    <h2 class="philosopher-name">Schopenhauer</h2>
+                </div>
+                <div class="philosopher-info">
+                    <p class="philosopher-quote">"Life swings like a pendulum backward and forward between pain and boredom."</p>
+                    <a href="schopenhauer.html" class="explore-btn">Explore Philosophy</a>
+                </div>
+            </div>
+            
+            <!-- Nietzsche Card -->
+            <div class="philosopher-card">
+                <div class="philosopher-image" style="background-image: url('nietzsche-bg.jpg');">
+                    <h2 class="philosopher-name">Nietzsche</h2>
+                </div>
+                <div class="philosopher-info">
+                    <p class="philosopher-quote">"To live is to suffer, to survive is to find some meaning in the suffering."</p>
+                    <a href="nietzsche.html" class="explore-btn">Explore Philosophy</a>
+                </div>
+            </div>
+            
+            <!-- Freud Card -->
+            <div class="philosopher-card">
+                <div class="philosopher-image" style="background-image: url('freud-bg.jpg');">
+                    <h2 class="philosopher-name">Freud</h2>
+                </div>
+                <div class="philosopher-info">
+                    <p class="philosopher-quote">"Most people do not really want freedom, because freedom involves responsibility..."</p>
+                    <a href="freud.html" class="explore-btn">Explore Philosophy</a>
+                </div>
+            </div>
+            
+            <!-- Zapffe Card -->
+            <div class="philosopher-card">
+                <div class="philosopher-image" style="background-image: url('zapffe-bg.jpg');">
+                    <h2 class="philosopher-name">Zapffe</h2>
+                </div>
+                <div class="philosopher-info">
+                    <p class="philosopher-quote">"Man is a tragic animal. Not because of his smallness, but because he is too well endowed."</p>
+                    <a href="zapffe.html" class="explore-btn">Explore Philosophy</a>
+                </div>
+            </div>
+            
+            <!-- Camus Card -->
+            <div class="philosopher-card">
+                <div class="philosopher-image" style="background-image: url('camus-bg.jpg');">
+                    <h2 class="philosopher-name">Camus</h2>
+                </div>
+                <div class="philosopher-info">
+                    <p class="philosopher-quote">"There is but one truly serious philosophical problem, and that is suicide."</p>
+                    <a href="camus.html" class="explore-btn">Explore Philosophy</a>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Philosophical Minds | A study in pessimistic philosophy</p>
+        </footer>
+    </div>
+
+    <script>
+        // Display quiz score if coming from quiz
+        const urlParams = new URLSearchParams(window.location.search);
+        const score = urlParams.get('score');
+        if (score) {
+            document.getElementById('score-display').textContent = `Your Quiz Score: ${score}`;
+        } else {
+            document.getElementById('score-display').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
