@@ -1,0 +1,18 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+#startup-container,
+#quiz-container,
+#results-container {
+    display: none;
+    width: 100%;
+    text-align: center;
+}
+
+.btn-primary {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+}
